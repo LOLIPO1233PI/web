@@ -166,19 +166,11 @@ class HTMLobj:
     def find(
         self,
         tag: str,
-        css: "CSSobj" = None,
         class_: str = None,
-        *contents: Union[str, "HTMLobj", Any],
         **attributes: str,
-    ) -> "HTMLobj":
-        for i in map(lambda content: isinstance(content, HTMLobj), self.contents):
-            if (
-                i.tag == tag
-                and i.css == css
-                and i.class_ == class_
-                and i.contents == contents
-                and i.attributes == attributes
-            ):
+    ) -> Union["HTMLobj", None]:
+        for i in (i for i in self.contents if isinstance(i, HTMLobj)):
+            if i.tag == tag and i.class_ == class_ and i.attributes == attributes:
                 return i
 
     def find_all(
@@ -186,13 +178,13 @@ class HTMLobj:
         tag: str,
         class_: str = None,
         **attributes: str,
-    ) -> list["HTMLobj"]:
-        _contents = [i for i in self.contents if isinstance(i, HTMLobj)]
-        all_targets = []
-        for i in _contents:
-            if i.tag == tag and i.class_ == class_ and i.attributes == attributes:
-                all_targets.append(i)
-        return all_targets
+    ) -> Iterator:
+        return map(
+            lambda x: (
+                x.tag == tag and x.class_ == class_ and x.attributes == attributes
+            ),
+            (i for i in self.contents if isinstance(i, HTMLobj)),
+        )
 
 
 def Basic_HTMLobj(tag: str, *contents) -> "HTMLobj":
