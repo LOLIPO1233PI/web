@@ -14,6 +14,9 @@ class CSSobj:
         self.selector = selector
         self.styles = styles
 
+    def __eq__(self, value):
+        return self.styles == value
+
     def __str__(self) -> str:
         return f"<{self.styles or 'Empty'}>"
 

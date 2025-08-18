@@ -125,6 +125,13 @@ class HTMLobj:
     def __contains__(self, content) -> bool:
         return content in self.contents
 
+    def __getattr__(self, tag: str) -> Any:
+        for i in self.contents:
+            if isinstance(i, HTMLobj):
+                if i.tag == tag:
+                    return i
+        raise AttributeError(f"The HTMLobj doesn't have {tag} as an attribute")
+
     def prettify(self, space: str = "  ") -> str:
         contents = []
         for i in self.contents:
@@ -151,11 +158,42 @@ class HTMLobj:
             print("couldn't continue the process due to %s", e)
 
     def txt(self) -> Iterator:
-        return map(lambda x: isinstance(x, str))
+        return map(lambda x: isinstance(x, str), self.contents)
 
     def children(self) -> Iterator:
         return iter(self.contents)
 
+    def find(
+        self,
+        tag: str,
+        css: "CSSobj" = None,
+        class_: str = None,
+        *contents: Union[str, "HTMLobj", Any],
+        **attributes: str,
+    ) -> "HTMLobj":
+        for i in map(lambda content: isinstance(content, HTMLobj), self.contents):
+            if (
+                i.tag == tag
+                and i.css == css
+                and i.class_ == class_
+                and i.contents == contents
+                and i.attributes == attributes
+            ):
+                return i
+
+    def find_all(
+        self,
+        tag: str,
+        class_: str = None,
+        **attributes: str,
+    ) -> list["HTMLobj"]:
+        _contents = [i for i in self.contents if isinstance(i, HTMLobj)]
+        all_targets = []
+        for i in _contents:
+            if i.tag == tag and i.class_ == class_ and i.attributes == attributes:
+                all_targets.append(i)
+        return all_targets
+
 
 def Basic_HTMLobj(tag: str, *contents) -> "HTMLobj":
-    return HTMLobj(tag=tag, css=None, class_=None, *contents)
+    return HTMLobj(tag, None, None, *contents)
