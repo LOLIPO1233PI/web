@@ -1,1 +1,125 @@
-# HTML-mini-engine
+
+# 🌐 Web – Python HTML & CSS Engine
+
+[![Python](https://img.shields.io/badge/python-3.10%2B-blue)](https://www.python.org/)
+[![Status](https://img.shields.io/badge/status-active-success)](#)
+
+A lightweight, Pythonic engine for building and managing **HTML** and **CSS** programmatically.  
+Think of it as a minimal DOM builder for Python: create HTML elements, apply styles, nest components, and export to clean, readable HTML files.
+
+---
+
+## Features
+
+- 🔖 **HTML Object Model** – Define HTML tags as Python objects  
+- 🖌 **CSS Integration** – Apply inline styles via a `CSSobj`  
+- ⚡ **Self-Closing Tag Support** – Handles `<br>`, `<img>`, etc. automatically  
+- 📜 **Pretty Output** – Generate neatly indented HTML  
+- 🔍 **Element Querying** – `find` & `find_all` like in BeautifulSoup  
+- 💾 **Export Support** – Save HTML directly to disk  
+- 🧹 **Memory-Friendly** – Auto-cleanup with `with` blocks  
+
+---
+
+## Installation
+
+Clone the repository:
+
+```bash
+git clone https://github.com/LOLIPO1233PI/web.git
+cd web
+````
+
+(You can later package it with `pip install .` if desired.)
+
+---
+
+## Quick Start
+
+```python
+from html_ import HTMLobj
+from css import CSSobj
+
+
+# Create styled paragraph
+css = CSSobj(color="red", font_size="16px")
+p = HTMLobj("p", css, "text", "Hello, world!")
+
+# Wrap inside a container
+div = HTMLobj("div", None, "container", p, HTMLobj("br"))
+
+# Pretty-print result
+print(div.prettify())
+
+```
+
+Output:
+
+```html
+<div class=container>
+  <p styles="color: red; font_size: 16px;" class=text>
+    Hello, world!
+  </p>
+  <br/>
+</div>
+```
+
+---
+
+## Project Structure
+
+```
+web/
+├── css.py        # CSS object engine
+├── html_.py       # HTML object engine (core DOM builder)
+├── js.py         # (Optional) JavaScript support
+└── __init__.py   # Package entry point
+```
+
+---
+
+## API Overview
+
+### 🔹 `HTMLobj`
+
+Represents an HTML element.
+
+**Constructor**
+
+```python
+HTMLobj(tag, css=None, class_=None, *contents, **attributes)
+```
+
+**Key Methods**
+
+* `.prettify(space="  ")` → Returns indented HTML
+* `.export(filepath, append=False)` → Write HTML to file
+* `.find(tag, class_=None, **attrs)` → Find first matching child
+* `.find_all(tag, class_=None, **attrs)` → Find all matching children
+* `.children()` → Iterate over children
+
+---
+
+### 🔹 `CSSobj`
+
+(From `css.py`) – Represents a CSS object as a Python object.
+
+**Example**
+
+```python
+from css import CSSobj
+
+css = CSSobj(color="blue", margin="10px")
+print(css.inline_css())  
+# "color: blue; margin: 10px"
+```
+
+---
+
+## 🤝 Contributing
+
+Contributions are open for all!
+
+* Fork the repo
+* Create a branch
+* Submit a Pull Request
