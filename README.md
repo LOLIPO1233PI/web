@@ -2,7 +2,6 @@
 # 🌐 Web – Python HTML & CSS Engine
 
 [![Python](https://img.shields.io/badge/python-3.10%2B-blue)](https://www.python.org/)
-[![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 [![Status](https://img.shields.io/badge/status-active-success)](#)
 
 A lightweight, Pythonic engine for building and managing **HTML** and **CSS** programmatically.  
