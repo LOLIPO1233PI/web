@@ -169,7 +169,7 @@ class HTMLobj:
         class_: str = None,
         **attributes: str,
     ) -> Union["HTMLobj", None]:
-        for i in (i for i in self.contents if isinstance(i, HTMLobj)):
+        for i in filter(lambda x: isinstance(x, HTMLobj), self.contents):
             if i.tag == tag and i.class_ == class_ and i.attributes == attributes:
                 return i
 
@@ -179,7 +179,7 @@ class HTMLobj:
         class_: str = None,
         **attributes: str,
     ) -> Iterator:
-        return map(
+        return filter(
             lambda x: (
                 x.tag == tag and x.class_ == class_ and x.attributes == attributes
             ),
