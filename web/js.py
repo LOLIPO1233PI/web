@@ -14,7 +14,7 @@ class Function:
     def append(self, value: str) -> None:
         self.contents.append(value)
 
-    def clear(self, value: str) -> None:
+    def clear(self) -> None:
         self.contents.clear()
 
     def __len__(self) -> None:

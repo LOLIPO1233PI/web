@@ -1,6 +1,6 @@
-from typing import Any, Iterator, Self, Union  # noqa: F401
+from typing import Any, Iterator, Self, Union
 from functools import singledispatchmethod
-from css import CSSobj
+from web.css import CSSobj
 
 # HTML engine v1.0
 
