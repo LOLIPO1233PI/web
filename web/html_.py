@@ -1,7 +1,7 @@
 from typing import Any, Iterator, Self, Union
 from functools import singledispatchmethod
 from web.css import CSSobj
-
+import webbrowser
 # HTML engine v1.0
 
 
@@ -185,6 +185,12 @@ class HTMLobj:
             ),
             (i for i in self.contents if isinstance(i, HTMLobj)),
         )
+
+    def preview(self) -> None:
+        url = f"data:text/html, {self}"
+        preview = webbrowser.open_new_tab(url)
+        if not preview:
+            print("Couldn't preview html object")
 
 
 def Basic_HTMLobj(tag: str, *contents) -> "HTMLobj":
