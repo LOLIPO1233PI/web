@@ -75,8 +75,3 @@ class Var:
     ):
         self.var_name = var_name
         self.declaration = declaration
-
-
-if __name__ == "__main__":
-    a = Function("abc", "name", "age")
-    print(a.as_script())
