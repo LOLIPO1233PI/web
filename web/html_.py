@@ -1,7 +1,9 @@
 from typing import Any, Iterator, Self, Union
 from functools import singledispatchmethod
+import uuid
 from web.css import CSSobj
 import webbrowser
+import os
 # HTML engine v1.0
 
 
@@ -151,7 +153,7 @@ class HTMLobj:
         mode = "w" if not append else "a"
         try:
             with open(html_filepath, mode, encoding="utf-8") as f:
-                f.write(self.prettify("    "))
+                f.write(self.prettify("\t"))
         except PermissionError:
             print("couldn't continue the process due to lack of permission")
         except IOError as e:
@@ -187,10 +189,14 @@ class HTMLobj:
         )
 
     def preview(self) -> None:
-        url = f"data:text/html, {self}"
-        preview = webbrowser.open_new_tab(url)
-        if not preview:
-            print("Couldn't preview html object")
+        "Opens a temp file that contains the html code to open it in the browser"
+        with open(os.path.abspath(f"${uuid.uuid4()}.html"), "w") as f:
+            f.write(self.prettify("\t"))
+            file_name = f.name
+        webbrowser.open_new_tab(f"file:///{file_name}")
+        input("Enter any key to exit the preview")
+        if os.path.isfile(file_name):
+            os.remove(file_name)
 
 
 def Basic_HTMLobj(tag: str, *contents) -> "HTMLobj":
