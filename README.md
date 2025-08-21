@@ -30,15 +30,13 @@ git clone https://github.com/LOLIPO1233PI/web.git
 cd web
 ````
 
-(You can later package it with `pip install .` if desired.)
-
 ---
 
 ## Quick Start
 
 ```python
-from html_ import HTMLobj
-from css import CSSobj
+from web.html_ import HTMLobj
+from web.css import CSSobj
 
 
 # Create styled paragraph
@@ -70,10 +68,14 @@ Output:
 
 ```
 web/
-├── css.py        # CSS object engine
-├── html_.py       # HTML object engine (core DOM builder)
-├── js.py         # (Optional) JavaScript support
-└── __init__.py   # Package entry point
+  web/
+  ├── css.py        # CSS object engine
+  ├── html_.py       # HTML object engine (core DOM builder)
+  ├── js.py         # JS support
+  └── __init__.py   # Package entry point
+  build/
+  dist/
+  web.egg-info/
 ```
 
 ---
@@ -116,9 +118,9 @@ print(css.inline_css())
 
 ---
 
-## 🤝 Contributing
+## Contributing
 
-Contributions are open for all!
+Contributions are open!
 
 * Fork the repo
 * Create a branch
