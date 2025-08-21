@@ -10,7 +10,7 @@ setup(
     name="web",
     version="0.1",
     packages=find_packages(),
-    description="a pythonic HTML & CSS engine",
+    description="A pythonic HTML & CSS engine",
     long_description=md_description,
     long_description_content_type="text/markdown",
     author="LOLIPO1233PI",

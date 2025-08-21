@@ -2,17 +2,13 @@ Metadata-Version: 2.2
 Name: web
 Version: 0.1
 Summary: A pythonic HTML & CSS engine
-Home-page: https://github.com/LOLIPO1233PI/
-Author: VOID
+Author: LOLIPO1233PI
 Author-email: gttyeio@gmail.com
-Project-URL: Source, https://github.com/LOLIPO1233PI/web
 Description-Content-Type: text/markdown
 Dynamic: author
 Dynamic: author-email
 Dynamic: description
 Dynamic: description-content-type
-Dynamic: home-page
-Dynamic: project-url
 Dynamic: summary
 
 
