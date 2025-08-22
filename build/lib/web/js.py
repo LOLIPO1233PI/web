@@ -1,4 +1,5 @@
-from typing import Literal, Self
+from functools import singledispatchmethod
+from typing import Any, Literal, Self
 
 
 class Function:
@@ -72,6 +73,43 @@ class Var:
         self,
         var_name: str,
         declaration: Literal["var", "let", "const", "global"] = "var",
+        value: str = "undefined",
     ):
         self.var_name = var_name
         self.declaration = declaration
+        self.value = value
+        self.items = {}
+
+    def __str__(self):
+        if self.declaration == "global":
+            return f"global.{self.var_name} = {self.value};"
+        return f"{self.declaration} {self.var_name} = {self.value};"
+
+    def change_value(self, value: str) -> str:
+        if self.declaration == "global":
+            return f"global.{self.var_name} = {value};"
+        return f"{self.value} = {value}"
+
+    @singledispatchmethod
+    def __setitem__(self, _key: Any, _value: Any) -> None:
+        return NotImplemented
+
+    @__setitem__.register
+    def _(self, key: str, value: str):
+        self.items[key] = value
+
+    @singledispatchmethod
+    def __setitem__(self, _key: Any) -> None:
+        return NotImplemented
+
+    @__setitem__.register
+    def _(self, key: str) -> str:
+        return self.items[key]
+
+
+def Return(value: str) -> str:
+    return f"return {value}"
+
+
+def new_instance(value: Var, class_name: str) -> str:
+    return value.change_value(f"new {class_name}")
