@@ -72,23 +72,31 @@ class Var:
     def __init__(
         self,
         var_name: str,
-        declaration: Literal["var", "let", "const", "global"] = "var",
+        type: Literal["instance", "int", "str", "hashmap", "array", "unknown"],
         value: str = "undefined",
+        declaration: Literal["var", "let", "const", "global"] = "var",
     ):
         self.var_name = var_name
         self.declaration = declaration
         self.value = value
-        self.items = {}
+        self.type = type
+        self.items = None
+        if type in ["hash", "instance"]:
+            self.items = {}
+        elif type == "array":
+            self.items = []
 
     def __str__(self):
         if self.declaration == "global":
             return f"global.{self.var_name} = {self.value};"
         return f"{self.declaration} {self.var_name} = {self.value};"
 
-    def change_value(self, value: str) -> str:
+    def change_value(self, value: str, type: str = ...) -> str:
+        if not isinstance(type, ellipsis):  # noqa: F821
+            self.type = type
         if self.declaration == "global":
             return f"global.{self.var_name} = {value};"
-        return f"{self.value} = {value}"
+        return f"{self.value} = {value};"
 
     @singledispatchmethod
     def __setitem__(self, _key: Any, _value: Any) -> None:
@@ -96,15 +104,33 @@ class Var:
 
     @__setitem__.register
     def _(self, key: str, value: str):
-        self.items[key] = value
-
-    @singledispatchmethod
-    def __setitem__(self, _key: Any) -> None:
+        if self.type in ["hash", "instance"]:
+            self.items[key] = value
         return NotImplemented
 
     @__setitem__.register
+    def _(self, key: int, value: str):
+        if self.type == "array":
+            self.items[key] = value
+        return NotImplemented
+
+    @singledispatchmethod
+    def __getitem__(self, _key: Any) -> None:
+        return NotImplemented
+
+    @__getitem__.register
     def _(self, key: str) -> str:
         return self.items[key]
+
+    def __getattr__(self, attribute: str) -> str:
+        if self.type in ["hash", "instance"]:
+            return self[attribute]
+        return NotImplemented
+
+    def __setattr__(self, attribute: str, value: str) -> str:
+        if self.declaration == "global":
+            return f"global.{self.var_name}.{attribute} = {value};"
+        return f"{self.value}.{attribute} = {value}"
 
 
 def Return(value: str) -> str:
