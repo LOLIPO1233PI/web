@@ -1,13 +1,15 @@
 from typing import Any, Iterator, Self, Union
 from functools import singledispatchmethod
-import uuid
+from uuid import uuid4
 from web.css import CSSobj
-import webbrowser
-import os
+from webbrowser import open_new_tab as open_new_browser_tab
+from os.path import isfile, abspath
+from os import remove
+
 # HTML engine v1.0
 
 
-def self_closing(tag: str) -> bool:
+def is_self_closing_tag(tag: str) -> bool:
     return tag in [
         "area",
         "base",
@@ -50,7 +52,7 @@ class HTMLobj:
         self.class_ = class_
         self.contents = [*contents]
         self.attributes = attributes
-        self.self_closing = self_closing(self.tag)
+        self.self_closing = is_self_closing_tag(self.tag)
         if self.self_closing and self.contents:
             raise ValueError("A self closing Html object cant contain sub elements")
         if not hasattr(self, "__indent"):
@@ -160,7 +162,7 @@ class HTMLobj:
             print("couldn't continue the process due to %s", e)
 
     def txt(self) -> Iterator:
-        return map(lambda x: isinstance(x, str), self.contents)
+        return filter(lambda x: isinstance(x, str), self.contents)
 
     def children(self) -> Iterator:
         return iter(self.contents)
@@ -190,13 +192,13 @@ class HTMLobj:
 
     def preview(self) -> None:
         "Opens a temp file that contains the html code to open it in the browser"
-        with open(os.path.abspath(f"${uuid.uuid4()}.html"), "w") as f:
+        with open(abspath(f"${uuid4()}.html"), "w") as f:
             f.write(self.prettify("\t"))
             file_name = f.name
-        webbrowser.open_new_tab(f"file:///{file_name}")
+        open_new_browser_tab(f"file:///{file_name}")
         input("Enter any key to exit the preview")
-        if os.path.isfile(file_name):
-            os.remove(file_name)
+        if isfile(file_name):
+            remove(file_name)
 
 
 def Basic_HTMLobj(tag: str, *contents) -> "HTMLobj":
