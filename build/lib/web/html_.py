@@ -54,7 +54,7 @@ class HTMLobj:
         self.attributes = attributes
         self.self_closing = is_self_closing_tag(self.tag)
         if self.self_closing and self.contents:
-            raise ValueError("A self closing Html object cant contain sub elements")
+            raise ValueError("A self closing html object cant contain sub elements")
         if not hasattr(self, "__indent"):
             self.__indent = 0
 
@@ -141,14 +141,17 @@ class HTMLobj:
         for i in self.contents:
             if i is None:
                 continue
-            elif isinstance(i, HTMLobj):
+            if isinstance(i, HTMLobj):
                 i.__indent = self.__indent + 1
                 contents.append(i.prettify())
             else:
                 contents.append(f"{space * (self.__indent + 1)}{i}")
-        contents = f"\n{'\n'.join(contents)}\n" if contents else ""
+        contents = "\n".join(contents)
+        contents = f"\n{contents}\n" if contents else ""
         startTAG, endTAG = self.__tag__()
-        return f"{space * self.__indent}{startTAG}{contents}{space * self.__indent if contents else ''}{endTAG}"
+        local_spaces = space * self.__indent
+        contents_relative_spaces = local_spaces if contents else ""
+        return f"{local_spaces}{startTAG}{contents}{contents_relative_spaces}{endTAG}"
 
     def export(self, html_filepath: str, append: bool = False) -> None:
         "export the css data to a .css file, via appending or rewriting a file completly"
@@ -199,6 +202,14 @@ class HTMLobj:
         input("Enter any key to exit the preview")
         if isfile(file_name):
             remove(file_name)
+
+    def add(self, value: Any) -> None:
+        if self.self_closing:
+            raise ValueError("Cannot add elements to a self closing html object")
+        self.contents.append(value)
+
+    def append(self, value: Any) -> None:
+        return self.add(value)
 
 
 def Basic_HTMLobj(tag: str, *contents) -> "HTMLobj":

@@ -203,6 +203,14 @@ class HTMLobj:
         if isfile(file_name):
             remove(file_name)
 
+    def add(self, value: Any) -> None:
+        if self.self_closing:
+            raise ValueError("Cannot add elements to a self closing html object")
+        self.contents.append(value)
+
+    def append(self, value: Any) -> None:
+        return self.add(value)
+
 
 def Basic_HTMLobj(tag: str, *contents) -> "HTMLobj":
     return HTMLobj(tag, None, None, *contents)
