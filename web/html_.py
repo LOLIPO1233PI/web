@@ -76,7 +76,7 @@ class HTMLobj:
             attributes.append(f'styles="{self.css.inline_css()}"')
         if self.class_:
             attributes.append(f"class={self.class_}")
-        for i in self.attributes:
+        for i in self.attributes or {}:
             attributes.append(f'{i}="{self.attributes[i]}"')
         attributes = f" {' '.join(attributes)}" if attributes else ""
         if self.self_closing:
@@ -138,7 +138,7 @@ class HTMLobj:
 
     def prettify(self, space: str = "  ") -> str:
         contents = []
-        for i in self.contents:
+        for i in self.contents or []:
             if i is None:
                 continue
             if isinstance(i, HTMLobj):
@@ -195,7 +195,7 @@ class HTMLobj:
 
     def preview(self) -> None:
         "Opens a temp file that contains the html code to open it in the browser"
-        with open(abspath(f"${uuid4()}.html"), "w") as f:
+        with open(abspath(f"${uuid4()}.html"), "w", encoding="utf-8") as f:
             f.write(self.prettify("\t"))
             file_name = f.name
         open_new_browser_tab(f"file:///{file_name}")
@@ -206,6 +206,8 @@ class HTMLobj:
     def add(self, value: Any) -> None:
         if self.self_closing:
             raise ValueError("Cannot add elements to a self closing html object")
+        if not isinstance(self.contents, list):
+            self.contents = []
         self.contents.append(value)
 
     def append(self, value: Any) -> None:
