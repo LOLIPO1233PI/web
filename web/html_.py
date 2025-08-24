@@ -195,13 +195,15 @@ class HTMLobj:
 
     def preview(self) -> None:
         "Opens a temp file that contains the html code to open it in the browser"
-        with open(abspath(f"${uuid4()}.html"), "w", encoding="utf-8") as f:
-            f.write(self.prettify("\t"))
-            file_name = f.name
-        open_new_browser_tab(f"file:///{file_name}")
-        input("Enter any key to exit the preview")
-        if isfile(file_name):
-            remove(file_name)
+        try:
+            with open(abspath(f"${uuid4()}.html"), "w", encoding="utf-8") as f:
+                f.write(self.prettify("\t"))
+                file_name = f.name
+            open_new_browser_tab(f"file:///{file_name}")
+            input("Enter any key to exit the preview")
+        finally:
+            if isfile(file_name):
+                remove(file_name)
 
     def add(self, value: Any) -> None:
         if self.self_closing:

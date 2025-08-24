@@ -7,8 +7,8 @@ except IOError:
     md_description = ""
 
 setup(
-    name="web",
-    version="0.1",
+    name="webhtml",
+    version="v0.1",
     packages=find_packages(),
     description="A pythonic HTML & CSS engine",
     long_description=md_description,
