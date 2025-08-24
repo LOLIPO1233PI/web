@@ -8,7 +8,7 @@ except IOError:
 
 setup(
     name="webhtml",
-    version="0.1.0f",
+    version="0.1.0ff",
     packages=find_packages(),
     description="A pythonic HTML & CSS engine",
     long_description=md_description,
