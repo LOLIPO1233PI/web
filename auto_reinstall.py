@@ -9,7 +9,7 @@ try:
             "pip",
             "install",
             "--force-reinstall",
-            "dist/web-0.1-py3-none-any.whl",
+            "dist/webhtml-0.1-py3-none-any.whl",
         ],
         check=True,
     )
